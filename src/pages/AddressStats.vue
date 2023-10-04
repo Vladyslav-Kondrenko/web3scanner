@@ -1,61 +1,26 @@
 <template>
   <p>address: {{ walletAddress }}</p>
 
-  <scalable-table
+  <transactions-table
     v-if="prettiedAccountTransactions.length > 0"
-    :tableHeaders="tableHeaders"
     :tableContent="prettiedAccountTransactions"
-  ></scalable-table>
+  ></transactions-table>
 </template>
 
 <script>
-import ScalableTable from "@/components/scalableTable/ScalableTable.vue";
+import TransactionsTable from "@/components/transactionsTable/TransactionsTable.vue";
 import dateFormat from "dateformat";
 import { makeApiRequest } from "../assets/js/apiRequest";
 
 export default {
   components: {
-    ScalableTable,
+    TransactionsTable,
   },
 
   data: () => ({
     walletAddress: '',
     prettiedAccountTransactions: [],
     accountBalace: [],
-    tableHeaders: [
-      {
-        title: "Successful",
-        key: "successful",
-      },
-      {
-        title: "Date",
-        key: "block_signed_at",
-      },
-      {
-        title: "Block",
-        key: "block_height",
-      },
-      {
-        title: "Txn Hash",
-        key: "tx_hash",
-      },
-      {
-        title: "From",
-        key: "from_address",
-      },
-      {
-        title: "To",
-        key: "to_address",
-      },
-      {
-        title: "Tnx fee",
-        key: "pretty_gas_quote",
-      },
-      {
-        title: "Value",
-        key: "pretty_value_quote",
-      },
-    ],
     // v-data-table-server
     queryPage: 0,
   }),

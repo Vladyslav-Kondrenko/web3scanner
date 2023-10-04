@@ -2,42 +2,31 @@
   <table class="scalable-table" v-if="tableHeader || tableContent">
     <thead>
       <tr>
-        <th v-for="tableHeader in tableHeaders" :key="tableHeader['key']">
-          {{ tableHeader["title"] }}
-        </th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Block</th>
+        <th>Txn Hash</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Tnx fee</th>
+        <th>Value</th>
       </tr>
     </thead>
 
     <tbody>
-      <tr v-for="(tableItem, index) in tableContent" :key="index">
-        <scalable-cell
-          v-for="tableHeader in tableHeaders"
-          :key="tableHeader['key']"
-          :content="tableItem[tableHeader['key']]"
-        ></scalable-cell>
-        <!-- <td v-for="tableHeader in tableHeaders" :key="tableHeader['key']">
-                    {{tableItem[tableHeader['key']]}}
-                </td> -->
-      </tr>
+      <transactions-table-row v-for="(tableItem, index) in tableContent" :key="index" :tableItem="tableItem"></transactions-table-row>
     </tbody>
   </table>
 </template>
 
 <script>
-import ScalableCell from "@/components/scalableTable/ScalableCell.vue";
+import TransactionsTableRow from "@/components/transactionsTable/TransactionsTableRow.vue";
 
 export default {
   components: {
-    ScalableCell,
+    TransactionsTableRow,
   },
   props: {
-    tableHeaders: {
-      type: Array,
-      required: true,
-      default() {
-        return [];
-      },
-    },
     tableContent: {
       type: Array,
       required: true,
@@ -52,7 +41,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 table {
   border: 1px solid #ccc;
   border-collapse: collapse;
@@ -71,6 +60,11 @@ table tr {
   background-color: #f8f8f8;
   border: 1px solid #ddd;
   padding: 0.35em;
+  transition: all 0.3s;
+}
+
+table tbody tr:hover{
+  background-color: #dadada;
 }
 
 table th,
