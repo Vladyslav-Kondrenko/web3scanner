@@ -1,14 +1,16 @@
-export const makeTransactionsPrettied = function (rawTransactions) {
+import dateFormat from "dateformat";
+
+export const makeTransactionsPrettied = function (rawTransactions, currentAddress) {
   let prettiedTransactions = [];
 
   rawTransactions.forEach((rawTransaction) => {
-    prettiedTransactions.push(this.transactionPrettier(rawTransaction));
+    prettiedTransactions.push(transactionPrettier(rawTransaction, currentAddress));
   });
 
   return prettiedTransactions;
 };
 
-const transactionPrettier = function (rawTransaction) {
+const transactionPrettier = function (rawTransaction, currentAddress) {
   let successful = String(rawTransaction["successful"]);
   let block_signed_at = new Date(rawTransaction["block_signed_at"]);
   block_signed_at = dateFormat(block_signed_at, "yyyy-mm-dd HH:MM:ss");
@@ -31,18 +33,18 @@ const transactionPrettier = function (rawTransaction) {
       routerLinkUrl: "/block/" + block_height,
     },
     tx_hash: {
-      text: this.sliceTransaction(tx_hash),
+      text: sliceTransaction(tx_hash),
       routerLinkUrl: "/transaction/" + tx_hash,
     },
     from_address: {
-      text: this.sliceTransaction(from_address),
+      text: sliceTransaction(from_address),
       routerLinkUrl:
-        this.walletAddress !== from_address ? "/address/" + from_address : "",
+        currentAddress !== from_address ? "/address/" + from_address : "",
     },
     to_address: {
-      text: this.sliceTransaction(to_address),
+      text: sliceTransaction(to_address),
       routerLinkUrl:
-        this.walletAddress !== to_address ? "/address/" + to_address : "",
+        currentAddress !== to_address ? "/address/" + to_address : "",
     },
     pretty_gas_quote: {
       text: pretty_gas_quote,
