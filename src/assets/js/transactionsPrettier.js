@@ -20,7 +20,6 @@ const transactionPrettier = function (rawTransaction, currentAddress) {
   let to_address = rawTransaction["to_address"];
   let pretty_gas_quote = rawTransaction["pretty_gas_quote"];
   let pretty_value_quote = rawTransaction["pretty_value_quote"];
-
   const prettiedTransaction = {
     successful: {
       text: successful,
@@ -30,7 +29,7 @@ const transactionPrettier = function (rawTransaction, currentAddress) {
     },
     block_height: {
       text: block_height,
-      routerLinkUrl: "/block/" + block_height,
+      routerLinkUrl: currentAddress!== block_height ? "/block/" + block_height : "",
     },
     tx_hash: {
       text: sliceTransaction(tx_hash),

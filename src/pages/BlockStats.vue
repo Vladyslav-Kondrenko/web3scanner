@@ -1,89 +1,70 @@
 <template>
   <p>Block id: {{ $route.params.id }}</p>
   <pre>
-
-    {{ prettiedAccountTransactions }}
+    <transactions-table
+    v-if="prettiedBlockTransactions.length > 0"
+    :tableContent="prettiedBlockTransactions"
+  ></transactions-table>
+    {{ prettiedBlockTransactions }}
   </pre>
 </template>
 
 <script>
-export default {
+import TransactionsTable from "@/components/transactionsTable/TransactionsTable.vue";
+import { makeApiRequest } from "../assets/js/apiRequest";
+import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
 
+export default {
+  components: {
+    TransactionsTable,
+  },
 
   data: () => ({
-    walletAddress: "",
-    prettiedAccountTransactions: [],
-
-    // v-data-table-server
-    tableHeaders: [
-      {
-        title: "successful",
-        key: "successful",
-      },
-      {
-        title: "block_signed_at",
-        key: "block_signed_at",
-      },
-      {
-        title: "block_height",
-        key: "block_height",
-      },
-      {
-        title: "tx_hash",
-        key: "tx_hash",
-      },
-      {
-        title: "from_address",
-        key: "from_address",
-      },
-      {
-        title: "to_address",
-        key: "to_address",
-      },
-      {
-        title: "pretty_gas_quote",
-        key: "pretty_gas_quote",
-      },
-      {
-        title: "pretty_value_quote",
-        key: "pretty_value_quote",
-      },
-    ],
-
+    currentBlockID: "",
+    prettiedBlockTransactions: [],
     queryPage: 0,
   }),
 
   methods: {
-    async getRawAccountTransactons() {
-      const url = `/block/${this.$route.params.id}/transactions_v3/`;
+    async prepareBlockData() {
+      // TODO: Придумать решение в случае если запрос сработал неверно. Возможно нужно отобразить блок "try again or later"
+      // Clear array before fill it with new data
+      this.prettiedBlockTransactions.splice(
+        0,
+        this.prettiedBlockTransactions.length
+      );
 
-      this.$axios
-        .get(url)
-        .then((response) => {
-          console.log(response.data);
-          let rawAccountTransactions = response.data.data.items;
-          console.log(rawAccountTransactions);
-          this.prettiedAccountTransactions = rawAccountTransactions;
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      const rawBlockTranactions = await this.getRawBlockTransactons();
+      if (rawBlockTranactions) {
+        this.prettiedBlockTransactions.push(
+          ...makeTransactionsPrettied(rawBlockTranactions, this.currentBlockID)
+        );
+      }
+    },
+
+    async getRawBlockTransactons() {
+      const url = `/block/${this.$route.params.id}/transactions_v3/`;
+      try {
+        return await makeApiRequest(this.$axios, url);
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 
   mounted() {
-    this.walletAddress = this.$route.params.wallet;
-    this.getRawAccountTransactons();
+    this.currentBlockID = this.$route.params.id;
+    this.prepareBlockData();
   },
 
   watch: {
-    "$route.params.wallet": {
+    "$route.params.id": {
       handler: function () {
-        this.walletAddress = this.$route.params.wallet;
-        this.getRawAccountTransactons();
+        this.currentBlockID = this.$route.params.id;
+        this.prepareBlockData();
       },
       deep: true,
-      immediate: true,
+      immediate: false,
     },
   },
 };
