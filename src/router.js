@@ -2,7 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import HomePage from "@/pages/HomePage";
 import BlocksStats from "@/pages/BlockStats";
 import AddressStats from "@/pages/AddressStats";
-import TransactionInfo from "@/pages/TransactionInfo";
+import TransactionStats from "@/pages/TransactionStats";
 
 
 
@@ -24,8 +24,8 @@ const routes = [
     },
     {
         path: '/transaction/:hash',
-        name: 'Transaction Info',
-        component: TransactionInfo,
+        name: 'Transaction Stats',
+        component: TransactionStats,
     }
 ]
 

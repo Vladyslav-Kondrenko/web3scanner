@@ -1,6 +1,8 @@
 <template>
   <p>address: {{ walletAddress }}</p>
 
+  <address-balance></address-balance>
+
   <transactions-table
     v-if="prettiedAccountTransactions.length > 0"
     :tableContent="prettiedAccountTransactions"
@@ -9,22 +11,24 @@
 
 <script>
 import TransactionsTable from "@/components/transactionsTable/TransactionsTable.vue";
+import AddressBalance from "@/components/AddressBalance.vue";
 import { makeApiRequest } from "../assets/js/apiRequest";
 import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
+
 export default {
   components: {
     TransactionsTable,
+    AddressBalance
   },
 
   data: () => ({
     walletAddress: "",
     prettiedAccountTransactions: [],
-    accountBalance: [],
     queryPage: 0,
   }),
 
   methods: {
-    async prepareAddresssData() {
+    async prepareAddressData() {
       // TODO: Придумать решение в случае если запрос сработал неверно. Возможно нужно отобразить блок "try again or later"
       // Clear array before fill it with new data
       this.prettiedAccountTransactions.splice(
@@ -37,7 +41,6 @@ export default {
         this.prettiedAccountTransactions.push(
           ...makeTransactionsPrettied(rawAccountTranactions, this.walletAddress)
         );
-        this.accountBalance = await this.getRawAccountBalance();
       }
     },
 
@@ -50,28 +53,18 @@ export default {
         console.error(error);
       }
     },
-
-    async getRawAccountBalance() {
-      const url = `/address/${this.walletAddress}/balances_v2/`;
-
-      try {
-        return await makeApiRequest(this.$axios, url);
-      } catch (error) {
-        console.error(error);
-      }
-    },
   },
 
   mounted() {
     this.walletAddress = this.$route.params.wallet;
-    this.prepareAddresssData();
+    this.prepareAddressData();
   },
 
   watch: {
     "$route.params.wallet": {
       handler: function () {
         this.walletAddress = this.$route.params.wallet;
-        this.prepareAddresssData();
+        this.prepareAddressData();
       },
       deep: true,
       immediate: false,
