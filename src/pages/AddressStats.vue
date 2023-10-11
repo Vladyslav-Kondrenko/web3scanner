@@ -1,5 +1,6 @@
 <template>
-  <p>address: {{ walletAddress }}</p>
+  <p>address: </p>
+  <copy-content :visualContent="walletAddress"> </copy-content>
 
   <address-balance></address-balance>
 
@@ -12,13 +13,15 @@
 <script>
 import TransactionsTable from "@/components/transactionsTable/TransactionsTable.vue";
 import AddressBalance from "@/components/AddressBalance.vue";
+import CopyContent from "@/components/copyContent/CopyContent.vue";
 import { makeApiRequest } from "../assets/js/apiRequest";
 import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
 
 export default {
   components: {
     TransactionsTable,
-    AddressBalance
+    AddressBalance,
+    CopyContent
   },
 
   data: () => ({

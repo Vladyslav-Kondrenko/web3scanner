@@ -6,11 +6,18 @@
       <template v-else>
         <router-link :to="routerLinkUrl">{{ text }}</router-link>
       </template>
+      <copy-content v-if="contentForCopy" :contentForCopy="contentForCopy"></copy-content>
     </td>
   </template>
   
   <script>
+  import CopyContent from "@/components/copyContent/CopyContent.vue";
+
   export default {
+    components: {
+      CopyContent
+    },
+
     props: {
       content: {
         type: Object,
@@ -27,6 +34,9 @@
       },
       routerLinkUrl() {
         return this.content['routerLinkUrl'];
+      },
+      contentForCopy() {
+        return this.content['contentForCopy'];
       },
     },
   };

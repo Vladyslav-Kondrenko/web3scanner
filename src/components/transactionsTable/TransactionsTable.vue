@@ -1,5 +1,5 @@
 <template>
-  <table class="scalable-table" v-if="tableHeader || tableContent">
+  <table class="scalable-table" v-if="tableContent">
     <thead>
       <tr>
         <th>Status</th>

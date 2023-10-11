@@ -1,10 +1,15 @@
 import dateFormat from "dateformat";
 
-export const makeTransactionsPrettied = function (rawTransactions, currentAddress) {
+export const makeTransactionsPrettied = function (
+  rawTransactions,
+  currentAddress
+) {
   let prettiedTransactions = [];
 
   rawTransactions.forEach((rawTransaction) => {
-    prettiedTransactions.push(transactionPrettier(rawTransaction, currentAddress));
+    prettiedTransactions.push(
+      transactionPrettier(rawTransaction, currentAddress)
+    );
   });
 
   return prettiedTransactions;
@@ -29,21 +34,26 @@ const transactionPrettier = function (rawTransaction, currentAddress) {
     },
     block_height: {
       text: block_height,
-      routerLinkUrl: currentAddress!== block_height ? "/block/" + block_height : "",
+      routerLinkUrl:
+        currentAddress !== block_height ? "/block/" + block_height : "",
+      contentForCopy: block_height,
     },
     tx_hash: {
       text: sliceTransaction(tx_hash),
       routerLinkUrl: "/transaction/" + tx_hash,
+      contentForCopy: tx_hash,
     },
     from_address: {
       text: sliceTransaction(from_address),
       routerLinkUrl:
         currentAddress !== from_address ? "/address/" + from_address : "",
+      contentForCopy: from_address,
     },
     to_address: {
       text: sliceTransaction(to_address),
       routerLinkUrl:
         currentAddress !== to_address ? "/address/" + to_address : "",
+      contentForCopy: to_address,
     },
     pretty_gas_quote: {
       text: pretty_gas_quote,
