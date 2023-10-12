@@ -17,12 +17,12 @@ export default {
 
   props: {
     visualContent: {
-      type: String,
+      type: [String, Number],
       required: false,
       default: "",
     },
     contentForCopy: {
-      type: String,
+      type: [String, Number],
       required: true,
       default: "",
     },

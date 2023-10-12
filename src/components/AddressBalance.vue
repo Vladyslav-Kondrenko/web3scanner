@@ -22,10 +22,6 @@
       <p class="balance__item-quote">{{ balanceItem.pretty_quote }}</p>
     </li>
   </ul>
-  <pre>
-    {{ accountBalanceData }}
-</pre
-  >
 </template>
 
 <script>
