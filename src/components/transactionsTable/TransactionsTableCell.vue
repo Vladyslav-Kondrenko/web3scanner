@@ -12,7 +12,7 @@
   
   <script>
   import CopyContent from "@/components/copyContent/CopyContent.vue";
-
+  
   export default {
     components: {
       CopyContent

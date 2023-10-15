@@ -1,8 +1,9 @@
 <template>
   <p>address: </p>
   <copy-content :visualContent="walletAddress"> </copy-content>
+  <favorite-wallet :wallet="walletAddress"></favorite-wallet>
 
-  <address-balance></address-balance>
+  <address-balance ></address-balance>
 
   <transactions-table
     v-if="prettiedAccountTransactions.length > 0"
@@ -16,12 +17,15 @@ import AddressBalance from "@/components/AddressBalance.vue";
 import CopyContent from "@/components/copyContent/CopyContent.vue";
 import { makeApiRequest } from "../assets/js/apiRequest";
 import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
+import FavoriteWallet from "@/components/favoritesWallet/FavoriteWallet.vue";
+
 
 export default {
   components: {
     TransactionsTable,
     AddressBalance,
-    CopyContent
+    CopyContent,
+    FavoriteWallet
   },
 
   data: () => ({
