@@ -62,7 +62,7 @@ export default {
     },
   },
 
-  mounted() {
+  beforeMount() {
     this.walletAddress = this.$route.params.wallet;
     this.prepareAddressData();
   },

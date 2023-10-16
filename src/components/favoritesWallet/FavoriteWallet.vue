@@ -1,8 +1,8 @@
 <template>
   <button
     class="favorite-wallet__button"
-    :class="{ 'favorite-wallet__button--active': isWalletFavorite }"
-    @click="favoriteWalletButtonHandler"
+    :class="{ 'favorite-wallet__button--active': walletActiveStatus }"
+    @click.prevent="favoriteWalletButtonHandler"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -32,9 +32,8 @@
 import { getCookie } from "@/helpers/getCookie";
 import { setCookie } from "@/helpers/setCookie";
 export default {
-  inheritAttrs: false,
   data: () => ({
-    isWalletFavorite: false,
+    walletActiveStatus: false,
   }),
 
   props: {
@@ -47,38 +46,72 @@ export default {
 
   methods: {
     favoriteWalletButtonHandler() {
+      this.isWalletFavorite()
+        ? this.deleteWalletFromFavorite(this.wallet)
+        : this.addWalletToFavorite(this.wallet);
+      console.log(getCookie("favoritesWallets"));
+    },
+
+    getFavoritesWallets() {
       let favoritesWallets = getCookie("favoritesWallets");
 
-      if (favoritesWallets.includes(this.wallet)) {
-        favoritesWallets = favoritesWallets.filter((e) => {
-          return e !== this.wallet;
-        });
-        this.isWalletFavorite = false;
-      } else {
-        favoritesWallets.push(this.wallet);
-        this.isWalletFavorite = true;
+      if (favoritesWallets === null) {
+        setCookie("favoritesWallets", []);
+        favoritesWallets = [];
       }
 
-      setCookie("favoritesWallets", favoritesWallets);
-      console.log(getCookie("favoritesWallets"));
+      return favoritesWallets;
+    },
+
+    isWalletFavorite() {
+      let favoritesWallets = this.getFavoritesWallets();
+      return (
+        favoritesWallets.find((item) => item["address"] === this.wallet) !==
+        undefined
+      );
+    },
+
+    addWalletToFavorite(wallet) {
+      let favoritesWallets = this.getFavoritesWallets();
+      console.log("add");
+      if (!this.isWalletFavorite()) {
+        favoritesWallets.push({
+          address: wallet,
+          name: "",
+          note: "",
+        });
+        setCookie("favoritesWallets", favoritesWallets);
+        this.walletActiveStatus = !this.walletActiveStatus;
+      }
+    },
+
+    deleteWalletFromFavorite(wallet) {
+      console.log("wallet to delete", wallet);
+      let favoritesWallets = this.getFavoritesWallets();
+
+      if (this.isWalletFavorite()) {
+        favoritesWallets = favoritesWallets.filter(
+          (item) => item["address"] != wallet
+        );
+        setCookie("favoritesWallets", favoritesWallets);
+        this.walletActiveStatus = !this.walletActiveStatus;
+        console.log(getCookie("favoritesWallets"), "getcookie after delete");
+      }
     },
   },
 
-  beforeUpdate() {
-    console.log(this.wallet)
-    let favoritesWallets = getCookie("favoritesWallets");
+  mounted() {
+    this.walletActiveStatus = this.isWalletFavorite();
+  },
 
-    if (favoritesWallets === null) {
-      setCookie("favoritesWallets", []);
-      favoritesWallets = [];
-    }
-    
-    console.log(favoritesWallets, favoritesWallets.includes(this.wallet), this.wallet);
-    if (favoritesWallets.includes(this.wallet)) {
-      this.isWalletFavorite = true;
-    } else{
-      this.isWalletFavorite = false;
-    }
+  watch: {
+    wallet: {
+      handler: function () {
+        console.log("watcth work", this.wallet);
+        this.walletActiveStatus = this.isWalletFavorite();
+      },
+      immediate: false,
+    },
   },
 };
 </script>
