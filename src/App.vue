@@ -10,7 +10,7 @@
 
 <script>
 import SearchForm from "@/components/SearchForm.vue";
-import AppHeader from './layouts/AppHeader.vue';
+import AppHeader from './layouts/Header/AppHeader.vue';
 
 export default {
   name: "App",
@@ -27,8 +27,13 @@ export default {
   methods: {
     searchWalletStats(address) {
       this.searchValue = address;
-      this.$emit('searchValue', this.searchValue);
     },
   },
 };
 </script>
+
+<style lang="scss">
+  :root{
+    --test: red;
+  }
+</style>

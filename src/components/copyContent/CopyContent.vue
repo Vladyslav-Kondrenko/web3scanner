@@ -54,5 +54,17 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+
+.copy-content{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &__button{
+    display: flex;
+    align-items: center;
+  }
+}
+
 </style>

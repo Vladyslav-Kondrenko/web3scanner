@@ -11,7 +11,7 @@
       viewBox="0 0 24 24"
       fill="none"
     >
-      <path
+      <path id="favorite-wallet__heart-border"
         opacity="0.15"
         d="M4.3314 12.0474L12 20L19.6686 12.0474C20.5211 11.1633 21 9.96429 21 8.71405C21 6.11055 18.9648 4 16.4543 4C15.2487 4 14.0925 4.49666 13.24 5.38071L12 6.66667L10.76 5.38071C9.90749 4.49666 8.75128 4 7.54569 4C5.03517 4 3 6.11055 3 8.71405C3 9.96429 3.47892 11.1633 4.3314 12.0474Z"
         fill="#000000"
@@ -117,10 +117,11 @@ export default {
 </script>
 
 <style>
-.favorite-wallet__button svg #favorite-wallet__heart {
-  fill: #fff;
+.favorite-wallet__button #favorite-wallet__heart {
+  stroke: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));;
 }
 .favorite-wallet__button--active svg #favorite-wallet__heart {
-  fill: yellow;
+  fill: RGB(var(--v-theme-primary));
+  stroke: RGB(var(--v-theme-surface));
 }
 </style>

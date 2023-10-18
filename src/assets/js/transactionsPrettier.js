@@ -1,4 +1,5 @@
 import dateFormat from "dateformat";
+import { sliceTransaction } from "@/helpers/sliceTransaction.js";
 
 export const makeTransactionsPrettied = function (
   rawTransactions,
@@ -64,10 +65,4 @@ const transactionPrettier = function (rawTransaction, currentAddress) {
   };
 
   return prettiedTransaction;
-};
-
-const sliceTransaction = function (transaction) {
-  return !transaction || transaction.length < 8
-    ? transaction
-    : transaction.slice(0, 4) + "..." + transaction.slice(-4);
 };

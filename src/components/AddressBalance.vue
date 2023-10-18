@@ -1,95 +1,69 @@
 <template>
-  <p>balance</p>
-  <p class="balance__total">
-    {{ calculateTotalBalance }}
-  </p>
-  <ul v-if="accountBalanceData.length > 0" class="balance__list">
+  <ul v-if="accountBalanceData.length > 0" class="balance-tokens__list">
     <li
       v-for="(balanceItem, index) in accountBalanceData"
-      class="balance__item"
+      class="balance-tokens__item"
       :key="index"
     >
-      <img
-        :src="balanceItem.logo_url"
-        :alt="balanceItem.contranct_name"
-        width="24"
-        height="24"
-      />
-      <p class="balance__item-name">
+      <div class="balance-tokens__img">
+        <img
+          :src="balanceItem.logo_url"
+          :alt="balanceItem.contranct_name"
+          width="24"
+          height="24"
+        />
+      </div>
+      <p class="balance-tokens__item-name">
         {{ balanceItem.contract_name }} (
         {{ balanceItem.contract_ticker_symbol }} )
       </p>
-      <p class="balance__item-quote">{{ balanceItem.pretty_quote }}</p>
+      <p class="balance-tokens__item-quote">{{ balanceItem.pretty_quote }}</p>
     </li>
   </ul>
 </template>
 
 <script>
-import { makeApiRequest } from "../assets/js/apiRequest";
-
 export default {
-  data: () => ({
-    walletAddress: "",
-    accountBalanceData: [],
-  }),
-  methods: {
-    async prepareAccountBalanceData() {
-      this.accountBalanceData.splice(0);
+  data: () => ({}),
 
-      const rawAccountData = await this.getRawAccountBalanceData();
-
-      if (rawAccountData) {
-        this.makeBalancePrettier(rawAccountData);
-      }
-    },
-
-    async getRawAccountBalanceData() {
-      const url = `/address/${this.walletAddress}/balances_v2/`;
-      const queryParams = {
-        "no-spam": true,
-      };
-      try {
-        return await makeApiRequest(this.$axios, url, queryParams);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-
-    makeBalancePrettier(rawAccountData) {
-      this.accountBalanceData = rawAccountData;
-      rawAccountData.forEach((balanceElement) => {
-        if (balanceElement.pretty_quote === 0) {
-          return;
-        }
-      });
-    },
-  },
-
-  mounted() {
-    this.walletAddress = this.$route.params.wallet;
-    this.prepareAccountBalanceData();
-  },
-
-  watch: {
-    "$route.params.wallet": {
-      handler: function () {
-        this.walletAddress = this.$route.params.wallet;
-        this.prepareAccountBalanceData();
+  props: {
+    accountBalanceData: {
+      type: Array,
+      required: true,
+      default: () => {
+        return [];
       },
-      deep: true,
-      immediate: false,
     },
   },
 
-  computed: {
-    calculateTotalBalance() {
-      return this.accountBalanceData.reduce(function (a, b) {
-        return a + b.quote;
-      }, 0);
-    },
-  },
+  computed: {},
 };
 </script>
 
-<style>
+<style lang="scss">
+.balance-tokens {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  &__img{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img{
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      object-position: center center;
+    }
+  }
+
+
+}
 </style>
