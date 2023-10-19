@@ -42,7 +42,7 @@ import { makeApiRequest } from "../assets/js/apiRequest";
 import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
 import FavoriteWallet from "@/components/favoritesWallet/FavoriteWallet.vue";
 import PrimaryCard from "@/components/PrimaryCard.vue";
-import AddressBalance from "@/components/AddressBalance.vue";
+import AddressBalance from "@/components/AddressBalance/AddressBalance.vue";
 import { sliceTransaction } from "@/helpers/sliceTransaction";
 
 export default {
@@ -96,7 +96,7 @@ export default {
       const rawAccountData = await this.getRawAccountBalanceData();
 
       if (rawAccountData) {
-        this.makeBalancePrettier(rawAccountData);
+        this.accountBalanceData = this.makeBalancePrettier(rawAccountData);
       }
       console.log(this.accountBalanceData);
     },
@@ -114,11 +114,11 @@ export default {
     },
 
     makeBalancePrettier(rawAccountData) {
-      this.accountBalanceData = rawAccountData;
-      rawAccountData.forEach((balanceElement) => {
-        if (balanceElement.pretty_quote === 0) {
-          return;
-        }
+      console.log(rawAccountData);
+      return rawAccountData.filter((item) => {
+        return (
+          item["pretty_quote"] !== "$0.00" && item["pretty_quote"] !== null
+        );
       });
     },
   },
@@ -163,6 +163,7 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-bottom: 24px;
   }
 }
 </style>

@@ -27,6 +27,10 @@ export default {
 .primary-card{
     padding: 16px;
     background: RGB(var(--v-theme-surface));
+
+    &__pretitle{
+        margin-bottom: 4px;
+    }
     
     &__title{
         display: flex;

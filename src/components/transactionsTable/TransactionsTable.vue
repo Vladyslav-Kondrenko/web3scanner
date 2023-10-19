@@ -1,5 +1,5 @@
 <template>
-  <table class="scalable-table" v-if="tableContent">
+  <table class="tx-table" v-if="tableContent">
     <thead>
       <tr>
         <th>Status</th>
@@ -43,7 +43,7 @@ export default {
 
 <style>
 table {
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   border-collapse: collapse;
   margin: 0;
   padding: 0;
@@ -57,14 +57,14 @@ table caption {
 }
 
 table tr {
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
+  background-color: RGB(var(--v-theme-surface));
+  border: 1px solid RGB(var(--v-theme-secondary));
   padding: 0.35em;
   transition: all 0.3s;
 }
 
 table tbody tr:hover{
-  background-color: #dadada;
+  background-color: RGB(var(--v-theme-background));
 }
 
 table th,
@@ -100,13 +100,13 @@ table th {
   }
 
   table tr {
-    border-bottom: 3px solid #ddd;
+    border: none;
     display: block;
     margin-bottom: 0.625em;
   }
 
   table td {
-    border-bottom: 1px solid #ddd;
+    border:none;
     display: block;
     font-size: 0.8em;
     text-align: right;

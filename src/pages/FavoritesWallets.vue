@@ -8,7 +8,7 @@
     @updateFavoriteWallet="updateFavoritesWallets"
   ></favorite-wallet-card>
 
-  <h2 v-if="listOfFavoritesWallets.length === 0">Favorites Wallets List is empty</h2>
+  <h2 v-if="listOfFavoritesWallets == null || listOfFavoritesWallets.length === 0">Favorites Wallets List is empty</h2>
 </template>
 
 <script>
