@@ -15,7 +15,9 @@
 
       <primary-card>
         <template v-slot:pretitle> Balance </template>
-        <template v-slot:title> {{ calculateTotalBalance }} $ </template>
+        <template v-slot:title>
+          {{ calculateTotalBalance }} $
+        </template>
       </primary-card>
 
       <primary-card>
@@ -26,6 +28,10 @@
           ></address-balance>
         </template>
       </primary-card>
+    </div>
+
+    <div class="address-stats__donut">
+      <donut-chart :accountBalanceData="accountBalanceData"></donut-chart>
     </div>
 
     <transactions-table
@@ -44,6 +50,8 @@ import FavoriteWallet from "@/components/favoritesWallet/FavoriteWallet.vue";
 import PrimaryCard from "@/components/PrimaryCard.vue";
 import AddressBalance from "@/components/AddressBalance/AddressBalance.vue";
 import { sliceTransaction } from "@/helpers/sliceTransaction";
+import { makeAmountReadable } from "@/helpers/makeAmountReadable";
+import donutChart from "@/components/donutChart.vue";
 
 export default {
   components: {
@@ -52,6 +60,7 @@ export default {
     FavoriteWallet,
     PrimaryCard,
     AddressBalance,
+    donutChart
   },
 
   data: () => ({
@@ -59,6 +68,8 @@ export default {
     prettiedAccountTransactions: [],
     accountBalanceData: [],
     queryPage: 0,
+
+    DONUT_ITEMS_LIMIT: 10,
   }),
 
   methods: {
@@ -98,7 +109,6 @@ export default {
       if (rawAccountData) {
         this.accountBalanceData = this.makeBalancePrettier(rawAccountData);
       }
-      console.log(this.accountBalanceData);
     },
 
     async getRawAccountBalanceData() {
@@ -143,11 +153,13 @@ export default {
 
   computed: {
     calculateTotalBalance() {
-      return this.accountBalanceData
-        .reduce(function (a, b) {
-          return a + b.quote;
-        }, 0)
-        .toFixed(2);
+      return makeAmountReadable(
+        this.accountBalanceData
+          .reduce(function (a, b) {
+            return a + b.quote;
+          }, 0)
+          .toFixed(2)
+      );
     },
 
     slicedWallet() {
@@ -164,6 +176,14 @@ export default {
     flex-direction: column;
     gap: 12px;
     margin-bottom: 24px;
+  }
+
+  &__donut {
+    width: 100%;
+
+    @media (min-width: 1280px) {
+      width: 50%;
+    }
   }
 }
 </style>

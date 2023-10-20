@@ -1,7 +1,11 @@
 <template>
-  <ul v-if="accountBalanceData.length > 0" class="balance-tokens__list">
+  <ul
+    v-if="accountBalanceData.length > 0"
+    class="balance-tokens__list"
+    ref="balanceList"
+  >
     <li
-      v-for="(balanceItem, index) in accountBalanceData"
+      v-for="(balanceItem, index) in getAccountBalanceData"
       class="balance-tokens__item"
       :key="index"
     >
@@ -19,15 +23,34 @@
           {{ balanceItem.contract_name }} (
           {{ balanceItem.contract_ticker_symbol }} )
         </p>
-        <p class="balance-tokens__item-quote">{{ balanceItem.pretty_quote ?? '$0.00' }}</p>
+        <p class="balance-tokens__item-quote">
+          {{ balanceItem.pretty_quote ?? "$0.00" }}
+        </p>
       </div>
     </li>
   </ul>
+  <div
+    v-if="accountBalanceData.length > DEFAULT_ITEM_VISIBLE_COUNT"
+    class="balance-tokens__showmore"
+  >
+    <v-btn
+      class="balance-tokens__showmore-button"
+      @click="showMoreHandler"
+      prepend-icon="$vuetify"
+      size="small"
+    >
+      Show {{ showFullBalance ? "Less" : "More" }}
+    </v-btn>
+  </div>
 </template>
 
 <script>
+import { scrollToTargetAdjusted } from "@/helpers/scrollToTargetAdjusted";
 export default {
-  data: () => ({}),
+  data: () => ({
+    DEFAULT_ITEM_VISIBLE_COUNT: 20,
+    showFullBalance: false,
+  }),
 
   props: {
     accountBalanceData: {
@@ -39,13 +62,26 @@ export default {
     },
   },
 
-  methods:{
-    handleImgErrorLoad(test){
-      test.target.src = require(`@/components/AddressBalance/img/eth-default.svg`) ;
-    }
+  computed: {
+    getAccountBalanceData() {
+      return this.showFullBalance
+        ? this.accountBalanceData
+        : this.accountBalanceData.slice(0, this.DEFAULT_ITEM_VISIBLE_COUNT);
+    },
   },
 
-  computed: {},
+  methods: {
+    handleImgErrorLoad(error) {
+      error.target.src = require(`@/components/AddressBalance/img/eth-default.svg`);
+    },
+
+    showMoreHandler() {
+      this.showFullBalance = !this.showFullBalance;
+      if (!this.showFullBalance) {
+        scrollToTargetAdjusted(this.$refs.balanceList);
+      }
+    },
+  },
 };
 </script>
 
@@ -58,7 +94,7 @@ export default {
     padding: 0;
     margin: 0;
     list-style: none;
-    
+
     @media (min-width: 767px) {
       grid-template-columns: 1fr 1fr;
     }
@@ -68,7 +104,7 @@ export default {
     }
   }
 
-  &__item{
+  &__item {
     display: flex;
     align-items: center;
     gap: 4px;
@@ -88,14 +124,18 @@ export default {
     }
   }
 
-  &__item-name{
-    font-size: .8em;
+  &__item-name {
+    font-size: 0.8em;
   }
 
-  &__item-quote{
+  &__item-quote {
     font-size: 1em;
     font-weight: 600;
   }
-  
+
+  &__showmore {
+    text-align: center;
+    padding-top: 16px;
+  }
 }
 </style>
