@@ -3,12 +3,14 @@
     <div class="address-stats__main-wrapper">
       <div class="address-stats__main-info">
         <primary-card class="">
-          <template v-slot:pretitle> Wallet Address </template>
+          <template v-slot:pretitle>Address </template>
           <template v-slot:title>
             <copy-content
               :content-for-copy="walletAddress"
-              :visualContent="slicedWallet"
             >
+            <template v-slot:content>
+              <p>{{ slicedWallet }}</p>
+            </template>
             </copy-content>
             <favorite-wallet :wallet="walletAddress"></favorite-wallet>
           </template>
@@ -30,13 +32,13 @@
       </div>
 
       <div class="address-stats__donut">
-        <donut-chart class="address-stats__donut-content" :accountBalanceData="accountBalanceData" :activeItemIndex="activeItemOnDonut"></donut-chart>
+        <donut-chart class="address-stats__donut-content" :accountBalanceData="accountBalanceData" :activeItemIndex="activeToken"></donut-chart>
       </div>
     </div>
 
     <transactions-table
-      v-if="prettiedAccountTransactions.length > 0"
-      :tableContent="prettiedAccountTransactions"
+      v-if="prettiedWalletAddress.length > 0"
+      :tableContent="prettiedWalletAddress"
     ></transactions-table>
   </v-container>
 </template>
@@ -65,11 +67,11 @@ export default {
 
   data: () => ({
     walletAddress: "",
-    prettiedAccountTransactions: [],
+    prettiedWalletAddress: [],
     accountBalanceData: [],
     queryPage: 0,
 
-    activeItemOnDonut: null,
+    activeToken: null,
     DONUT_ITEMS_LIMIT: 10,
   }),
 
@@ -77,24 +79,27 @@ export default {
     async prepareAddressData() {
       // TODO: Придумать решение в случае если запрос сработал неверно. Возможно нужно отобразить блок "try again or later"
       // Clear array before fill it with new data
-      this.prettiedAccountTransactions.splice(
+      this.prettiedWalletAddress.splice(
         0,
-        this.prettiedAccountTransactions.length
+        this.prettiedWalletAddress.length
       );
 
-      const rawAccountTranactions = await this.getRawAccountTransactons();
+      const rawAccountTranactions = await this.getRawAddressTransactons();
+      console.log(rawAccountTranactions, 'ttttttt')
       if (rawAccountTranactions) {
-        this.prettiedAccountTransactions.push(
-          ...makeTransactionsPrettied(rawAccountTranactions, this.walletAddress)
+        this.prettiedWalletAddress.push(
+          ...makeTransactionsPrettied(rawAccountTranactions.items, this.walletAddress)
         );
       }
     },
 
-    async getRawAccountTransactons() {
+    async getRawAddressTransactons() {
       const url = `/address/${this.walletAddress}/transactions_v3/page/${this.queryPage}/`;
-
+      const queryParams = {
+        "block-signed-at-asc": true,
+      };
       try {
-        return await makeApiRequest(this.$axios, url);
+        return await makeApiRequest(this.$axios, url, queryParams);
       } catch (error) {
         console.error(error);
       }
@@ -108,7 +113,7 @@ export default {
       const rawAccountData = await this.getRawAccountBalanceData();
 
       if (rawAccountData) {
-        this.accountBalanceData = this.makeBalancePrettier(rawAccountData);
+        this.accountBalanceData = this.makeBalancePrettier(rawAccountData.items);
       }
     },
 
@@ -134,7 +139,7 @@ export default {
     },
 
     showActiveItemOnChart(key){
-      this.activeItemOnDonut = key;
+      this.activeToken = key;
     }
   },
 

@@ -37,7 +37,7 @@ export default {
       const rawBlockTranactions = await this.getRawBlockTransactons();
       if (rawBlockTranactions) {
         this.prettiedBlockTransactions.push(
-          ...makeTransactionsPrettied(rawBlockTranactions, this.currentBlockID)
+          ...makeTransactionsPrettied(rawBlockTranactions.items, this.currentBlockID)
         );
       }
     },
@@ -45,7 +45,7 @@ export default {
     async getRawBlockTransactons() {
       const url = `/block/${this.$route.params.id}/transactions_v3/`;
       try {
-        return await makeApiRequest(this.$axios, url);
+        return await makeApiRequest(this.$axios, url, {'block-signed-at-asc': true});
       } catch (error) {
         console.error(error);
       }

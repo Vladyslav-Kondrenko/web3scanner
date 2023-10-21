@@ -118,10 +118,10 @@ export default {
 
 <style>
 .favorite-wallet__button #favorite-wallet__heart {
-  stroke: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));;
+  stroke: rgba(var(--v-theme-on-info), var(--v-high-emphasis-opacity));;
 }
 .favorite-wallet__button--active svg #favorite-wallet__heart {
-  fill: RGB(var(--v-theme-primary));
-  stroke: RGB(var(--v-theme-surface));
+  fill: RGB(var(--v-theme-info));
+  stroke: RGB(var(--v-theme-info));
 }
 </style>

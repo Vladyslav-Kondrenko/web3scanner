@@ -142,6 +142,7 @@ export default {
 
   &__item-name {
     font-size: 0.8em;
+    word-break: break-all;
   }
 
   &__item-quote {

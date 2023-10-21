@@ -41,7 +41,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 table {
   /* border: 1px solid #ccc; */
   border-collapse: collapse;
@@ -49,6 +49,15 @@ table {
   padding: 0;
   width: 100%;
   table-layout: fixed;
+
+  a{
+    color: #fff;
+    transition: all .3s; 
+
+    &:hover{
+      opacity: 0.7;
+    }
+  }
 }
 
 table caption {
@@ -58,7 +67,7 @@ table caption {
 
 table tr {
   background-color: RGB(var(--v-theme-surface));
-  border: 1px solid RGB(var(--v-theme-secondary));
+  border: 1px solid RGB(var(--v-theme-background));
   padding: 0.35em;
   transition: all 0.3s;
 }

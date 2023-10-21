@@ -1,7 +1,7 @@
 <template>
   <div class="copy-content">
     <div class="copy-content__text">
-      {{ visualContent }}
+      <slot name="content"></slot>
     </div>
     <button class="copy-content__button" @click="copyContentToClipboard">
       <img :src="buttonImageUrl" alt="" class="copy-content__icon" />
@@ -20,22 +20,14 @@ export default {
       type: [String, Number],
       required: false,
       default: "",
-    },
-    contentForCopy: {
-      type: [String, Number],
-      required: true,
-      default: "",
-    },
+    }
   },
 
   methods: {
     copyContentToClipboard() {
       if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(
-          this.contentForCopy.length > 0
-            ? this.contentForCopy
-            : this.visualContent
-        );
+          this.contentForCopy);
         this.copiedStatus = 1;
       } else {
         this.copiedStatus = 2;
