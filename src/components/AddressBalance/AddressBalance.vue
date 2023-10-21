@@ -7,6 +7,8 @@
     <li
       v-for="(balanceItem, index) in getAccountBalanceData"
       class="balance-tokens__item"
+      @mouseover.stop="itemMouseEnterHandler(index)"
+      @mouseleave.stop="itemMouseLeaveHandler"
       :key="index"
     >
       <div class="balance-tokens__item-img">
@@ -50,6 +52,7 @@ export default {
   data: () => ({
     DEFAULT_ITEM_VISIBLE_COUNT: 20,
     showFullBalance: false,
+    activeElementKey: null,
   }),
 
   props: {
@@ -81,6 +84,15 @@ export default {
         scrollToTargetAdjusted(this.$refs.balanceList);
       }
     },
+
+    itemMouseEnterHandler(index) {
+      this.$emit('activeItemKeyUpdated', index);
+    },
+
+    itemMouseLeaveHandler() {
+      this.$emit('activeItemKeyUpdated', null);
+
+    },
   },
 };
 </script>
@@ -98,16 +110,20 @@ export default {
     @media (min-width: 767px) {
       grid-template-columns: 1fr 1fr;
     }
-
-    @media (min-width: 1280px) {
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
   }
 
   &__item {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
+    transition: all .3s;
+    padding: 4px 8px;
+    border: 1px solid RGB(var(--v-theme-background));
+    border-radius: 4px;
+    cursor: pointer;
+    &:hover{
+      background:  RGB(var(--v-theme-info));
+    }
   }
 
   &__item-img {

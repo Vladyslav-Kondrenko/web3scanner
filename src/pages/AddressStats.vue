@@ -1,37 +1,37 @@
 <template>
   <v-container>
-    <div class="address-stats__main-info">
-      <primary-card class="">
-        <template v-slot:pretitle> Wallet Address </template>
-        <template v-slot:title>
-          <copy-content
-            :content-for-copy="walletAddress"
-            :visualContent="slicedWallet"
-          >
-          </copy-content>
-          <favorite-wallet :wallet="walletAddress"></favorite-wallet>
-        </template>
-      </primary-card>
+    <div class="address-stats__main-wrapper">
+      <div class="address-stats__main-info">
+        <primary-card class="">
+          <template v-slot:pretitle> Wallet Address </template>
+          <template v-slot:title>
+            <copy-content
+              :content-for-copy="walletAddress"
+              :visualContent="slicedWallet"
+            >
+            </copy-content>
+            <favorite-wallet :wallet="walletAddress"></favorite-wallet>
+          </template>
+        </primary-card>
 
-      <primary-card>
-        <template v-slot:pretitle> Balance </template>
-        <template v-slot:title>
-          {{ calculateTotalBalance }} $
-        </template>
-      </primary-card>
+        <primary-card>
+          <template v-slot:pretitle> Balance </template>
+          <template v-slot:title> $ {{ calculateTotalBalance }} </template>
+        </primary-card>
 
-      <primary-card>
-        <template v-slot:pretitle> Tokens </template>
-        <template v-slot:content>
-          <address-balance
-            :accountBalanceData="accountBalanceData"
-          ></address-balance>
-        </template>
-      </primary-card>
-    </div>
+        <primary-card>
+          <template v-slot:pretitle> Tokens </template>
+          <template v-slot:content>
+            <address-balance @activeItemKeyUpdated="showActiveItemOnChart"
+              :accountBalanceData="accountBalanceData"
+            ></address-balance>
+          </template>
+        </primary-card>
+      </div>
 
-    <div class="address-stats__donut">
-      <donut-chart :accountBalanceData="accountBalanceData"></donut-chart>
+      <div class="address-stats__donut">
+        <donut-chart class="address-stats__donut-content" :accountBalanceData="accountBalanceData" :activeItemIndex="activeItemOnDonut"></donut-chart>
+      </div>
     </div>
 
     <transactions-table
@@ -60,7 +60,7 @@ export default {
     FavoriteWallet,
     PrimaryCard,
     AddressBalance,
-    donutChart
+    donutChart,
   },
 
   data: () => ({
@@ -69,6 +69,7 @@ export default {
     accountBalanceData: [],
     queryPage: 0,
 
+    activeItemOnDonut: null,
     DONUT_ITEMS_LIMIT: 10,
   }),
 
@@ -131,6 +132,10 @@ export default {
         );
       });
     },
+
+    showActiveItemOnChart(key){
+      this.activeItemOnDonut = key;
+    }
   },
 
   beforeMount() {
@@ -171,11 +176,20 @@ export default {
 
 <style lang="scss">
 .address-stats {
+  &__main-wrapper {
+    margin-bottom: 24px;
+    @media (min-width: 1280px) {
+      display: flex;
+    }
+  }
   &__main-info {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-bottom: 24px;
+    @media (min-width: 1280px) {
+      width: 50%;
+      flex-shrink: 0;
+    }
   }
 
   &__donut {
@@ -183,6 +197,14 @@ export default {
 
     @media (min-width: 1280px) {
       width: 50%;
+      flex-shrink: 0;
+    }
+  }
+
+  &__donut-content {
+    @media (min-width: 1280px) {
+      position: sticky;
+      top: 150px;
     }
   }
 }
