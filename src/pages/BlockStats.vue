@@ -1,15 +1,18 @@
 <template>
-  <p>Block id: {{ $route.params.id }}</p>
-  <pre>
+  <v-container>
+    <primary-card>
+      <template v-slot:pretitle>Block</template>
+      <template v-slot:title>{{ $route.params.id }}</template>
+    </primary-card>
     <transactions-table
-    v-if="prettiedBlockTransactions.length > 0"
-    :tableContent="prettiedBlockTransactions"
-  ></transactions-table>
-    {{ prettiedBlockTransactions }}
-  </pre>
+      v-if="prettiedBlockTransactions.length > 0"
+      :tableContent="prettiedBlockTransactions"
+    ></transactions-table>
+  </v-container>
 </template>
 
 <script>
+import PrimaryCard from "@/components/PrimaryCard.vue";
 import TransactionsTable from "@/components/transactionsTable/TransactionsTable.vue";
 import { makeApiRequest } from "../assets/js/apiRequest";
 import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
@@ -17,6 +20,7 @@ import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
 export default {
   components: {
     TransactionsTable,
+    PrimaryCard,
   },
 
   data: () => ({
@@ -37,7 +41,10 @@ export default {
       const rawBlockTranactions = await this.getRawBlockTransactons();
       if (rawBlockTranactions) {
         this.prettiedBlockTransactions.push(
-          ...makeTransactionsPrettied(rawBlockTranactions.items, this.currentBlockID)
+          ...makeTransactionsPrettied(
+            rawBlockTranactions.items,
+            this.currentBlockID
+          )
         );
       }
     },
@@ -45,7 +52,9 @@ export default {
     async getRawBlockTransactons() {
       const url = `/block/${this.$route.params.id}/transactions_v3/`;
       try {
-        return await makeApiRequest(this.$axios, url, {'block-signed-at-asc': true});
+        return await makeApiRequest(this.$axios, url, {
+          "block-signed-at-asc": true,
+        });
       } catch (error) {
         console.error(error);
       }
@@ -71,5 +80,4 @@ export default {
 </script>
 
 <style>
-
 </style>

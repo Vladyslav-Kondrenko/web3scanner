@@ -1,20 +1,11 @@
 <template>
-  <single-transaction v-if="transactionData.length > 0" :transactionData="transactionData"></single-transaction>
+  <v-container>
+    <single-transaction
+      v-if="transactionData.length > 0"
+      :transactionData="transactionData"
+    ></single-transaction>
+  </v-container>
 </template>
-<!--
-  tnx hash
-  Status
-  Block
-  Timestamp
-  log_events
-    decoded
-      name
-      signature
-  From
-  Value
-  Transaction Fee
-  Gas Price
--->
 <script>
 import SingleTransaction from "@/components/SingleTransaction.vue";
 import { makeApiRequest } from "../assets/js/apiRequest";
@@ -30,11 +21,11 @@ export default {
   }),
 
   methods: {
-    async prepareTransactionData(){
+    async prepareTransactionData() {
       const rawTransactionData = await this.getTransactionInfoByHash();
-      console.log(rawTransactionData)
-      if(rawTransactionData){
-        this.transactionData = rawTransactionData;
+      console.log(rawTransactionData);
+      if (rawTransactionData) {
+        this.transactionData = rawTransactionData.items;
       }
     },
 
@@ -64,6 +55,21 @@ export default {
   },
 };
 </script>
+
+<!--
+  tnx hash
+  Status
+  Block
+  Timestamp
+  log_events
+    decoded
+      name
+      signature
+  From
+  Value
+  Transaction Fee
+  Gas Price
+-->
 
 <style>
 </style>

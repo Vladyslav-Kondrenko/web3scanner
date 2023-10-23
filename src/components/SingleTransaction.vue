@@ -3,7 +3,9 @@
     <div class="single-transaction__item" v-if="txHash">
       <div class="single-transaction__item-name">Transaction Hash:</div>
       <div class="single-transaction__item-value">
-        <copy-content  :contentForCopy="txHash" :visualContent="txHash"></copy-content>
+        <copy-content  :contentForCopy="txHash">
+          <template v-slot:content>{{ txHash }}</template>
+        </copy-content>
       </div>
     </div>
     <div class="single-transaction__item" v-if="status">
@@ -13,7 +15,9 @@
     <div class="single-transaction__item" v-if="block">
       <div class="single-transaction__item-name">Block:</div>
       <div class="single-transaction__item-value">
-        <copy-content :contentForCopy="block" :visualContent="block"></copy-content>
+        <copy-content :contentForCopy="block" :visualContent="block">
+          <template v-slot:content>{{ block }}</template>
+        </copy-content>
       </div>
     </div>
     <div class="single-transaction__item" v-if="timestamp">
@@ -23,13 +27,17 @@
     <div class="single-transaction__item" v-if="fromAddress">
       <div class="single-transaction__item-name">From:</div>
       <div class="single-transaction__item-value">
-        <copy-content :contentForCopy="fromAddress" :visualContent="fromAddress"></copy-content>
+        <copy-content :contentForCopy="fromAddress" :visualContent="fromAddress">
+          <template v-slot:content>{{ fromAddress }}</template>
+        </copy-content>
       </div>
     </div>
     <div class="single-transaction__item" v-if="toAddress">
       <div class="single-transaction__item-name">To:</div>
       <div class="single-transaction__item-value">
-        <copy-content :contentForCopy="toAddress" :visualContent="toAddress"></copy-content>
+        <copy-content :contentForCopy="toAddress" :visualContent="toAddress">
+          <template v-slot:content>{{ toAddress }}</template>
+        </copy-content>
       </div>
     </div>
     <div class="single-transaction__item" v-if="value">
