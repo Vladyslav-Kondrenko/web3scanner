@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1>Favorites Wallets</h1>
+    <h1 class="favorites-wallets__title">Favorites Wallets</h1>
 
     <div class="favorites-wallets__wrapper">
       <favorite-wallet-card
@@ -60,6 +60,11 @@ export default {
 
 <style lang="scss">
 .favorites-wallets{
+
+  &__title{
+    margin-bottom: 16px;
+  }
+  
   &__wrapper{
     display: grid;
     gap: 16px;

@@ -4,7 +4,6 @@ import BlocksStats from "@/pages/BlockStats";
 import AddressStats from "@/pages/AddressStats";
 import TransactionStats from "@/pages/TransactionStats";
 import FavoritesWallets from "@/pages/FavoritesWallets";
-import SearchHistory from "@/pages/SearchHistory";
 
 const routes = [
   {
@@ -31,11 +30,6 @@ const routes = [
     path: "/favorites-wallets/",
     name: "Favorites Wallets",
     component: FavoritesWallets,
-  },
-  {
-    path: "/search-history/",
-    name: "Search History",
-    component: SearchHistory,
   },
 ];
 
