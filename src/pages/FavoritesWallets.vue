@@ -8,6 +8,7 @@
         :key="index"
         :wallet="walletItem"
         @updateFavoriteWallet="updateFavoritesWallets"
+        @deleteWalletFromFavorite = "deleteWalletFromFavorite"
       ></favorite-wallet-card>
     </div>
 
@@ -23,7 +24,6 @@
 
 <script>
 import { getCookie } from "@/helpers/getCookie";
-// import { setCookie } from '@/helpers/setCookie';
 import FavoriteWalletCard from "@/components/favoriteWalletCard.vue";
 import { setCookie } from "@/helpers/setCookie";
 
@@ -48,6 +48,11 @@ export default {
       console.log(this.listOfFavoritesWallets);
 
       setCookie("favoritesWallets", this.listOfFavoritesWallets);
+    },
+
+    deleteWalletFromFavorite(){
+    this.listOfFavoritesWallets = getCookie("favoritesWallets");
+
     },
   },
 

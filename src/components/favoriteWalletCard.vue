@@ -1,22 +1,22 @@
 <template>
   <div class="wallet-card">
     <form class="wallet-card__form" @submit.prevent="walletCardSubmitHandler">
-      <input
+      <input @input="walletCardSubmitHandler"
         v-model="walletName"
         class="wallet-card__input"
         placeholder="Input wallet`s name"
       />
 
       <div class="wallet-card__wallet">
-        <copy-content>
+        <copy-content :contentForCopy="getWalletsAddress">
           <template v-slot:content>
             <router-link :to="'/address/' + getWalletsAddress">{{ slicedWalletAddress }}</router-link>
           </template>
         </copy-content>
-        <favorite-wallet :wallet="getWalletsAddress"></favorite-wallet>
+        <favorite-wallet :wallet="getWalletsAddress" @deleteWalletFromFavorite="updateCardsAfterDelete"></favorite-wallet>
       </div>
 
-      <textarea
+      <textarea @input="walletCardSubmitHandler"
         class="wallet-card__textarea"
         v-model="walletNote"
         placeholder="Add note"
@@ -24,9 +24,6 @@
         rows="10"
       ></textarea>
 
-      <v-btn type="submit" prepend-icon="$vuetify" size="small" max-width="140">
-        {{saveButtonText}}
-      </v-btn>
     </form>
   </div>
 </template>
@@ -72,11 +69,17 @@ export default {
 
       this.$emit("updateFavoriteWallet", updatedWallet);
     },
+
+    updateCardsAfterDelete(){
+      this.$emit('deleteWalletFromFavorite');
+    }
   },
 
   computed: {
     getWalletsAddress() {
-      return this.wallet.address ?? null;
+      console.log(this.wallet)
+      console.log(this.wallet.address, 'tttt')
+      return this.wallet.address;
     },
     slicedWalletAddress() {
       return sliceTransaction(this.wallet.address);
@@ -88,6 +91,13 @@ export default {
     this.walletName = this.wallet.name;
     this.walletNote = this.wallet.note;
   },
+
+  watch: {
+    wallet(){
+      this.walletName = this.wallet.name;
+      this.walletNote = this.wallet.note;
+    }
+  }
 };
 </script>
 

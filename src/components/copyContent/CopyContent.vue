@@ -16,7 +16,7 @@ export default {
   }),
 
   props: {
-    visualContent: {
+    contentForCopy: {
       type: [String, Number],
       required: false,
       default: "",

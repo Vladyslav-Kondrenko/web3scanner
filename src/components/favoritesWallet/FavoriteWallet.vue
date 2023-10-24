@@ -97,6 +97,8 @@ export default {
         this.walletActiveStatus = !this.walletActiveStatus;
         console.log(getCookie("favoritesWallets"), "getcookie after delete");
       }
+
+      this.$emit('deleteWalletFromFavorite', wallet);
     },
   },
 
