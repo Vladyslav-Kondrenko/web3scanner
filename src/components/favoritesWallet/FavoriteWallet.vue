@@ -117,6 +117,12 @@ export default {
 </script>
 
 <style>
+
+.favorite-wallet__button{
+  display: flex;
+  align-items: center;
+}
+
 .favorite-wallet__button #favorite-wallet__heart {
   stroke: rgba(var(--v-theme-on-info), var(--v-high-emphasis-opacity));;
 }

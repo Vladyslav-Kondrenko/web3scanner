@@ -3,7 +3,7 @@
     <div class="copy-content__text">
       <slot name="content"></slot>
     </div>
-    <button class="copy-content__button" @click="copyContentToClipboard">
+    <button class="copy-content__button" @click.prevent="copyContentToClipboard">
       <img :src="buttonImageUrl" alt="" class="copy-content__icon" />
     </button>
   </div>
@@ -52,6 +52,16 @@ export default {
   display: flex;
   align-items: center;
   gap: 4px;
+
+  &__text{
+    display: flex;
+    align-items: center;
+    color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+  
+    a{
+      color: inherit;
+    }
+  }
 
   &__button{
     display: flex;

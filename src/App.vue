@@ -33,7 +33,4 @@ export default {
 </script>
 
 <style lang="scss">
-  :root{
-    --test: red;
-  }
 </style>
