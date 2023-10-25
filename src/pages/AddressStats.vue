@@ -15,7 +15,7 @@
             <favorite-wallet :wallet="walletAddress"></favorite-wallet>
           </template>
         </primary-card>
-
+        
         <primary-card>
           <template v-slot:pretitle> Balance </template>
           <template v-slot:title> $ {{ calculateTotalBalance }} </template>
@@ -49,11 +49,11 @@ import CopyContent from "@/components/copyContent/CopyContent.vue";
 import { makeApiRequest } from "../assets/js/apiRequest";
 import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
 import FavoriteWallet from "@/components/favoritesWallet/FavoriteWallet.vue";
-import PrimaryCard from "@/components/PrimaryCard.vue";
+import PrimaryCard from "@/components/PrimaryCard/PrimaryCard.vue";
 import AddressBalance from "@/components/AddressBalance/AddressBalance.vue";
 import { sliceTransaction } from "@/helpers/sliceTransaction";
 import { makeAmountReadable } from "@/helpers/makeAmountReadable";
-import donutChart from "@/components/donutChart.vue";
+import donutChart from "@/components/donutChart/donutChart.vue";
 
 export default {
   components: {
@@ -85,7 +85,6 @@ export default {
       );
 
       const rawAccountTranactions = await this.getRawAddressTransactons();
-      console.log(rawAccountTranactions, 'ttttttt')
       if (rawAccountTranactions) {
         this.prettiedWalletAddress.push(
           ...makeTransactionsPrettied(rawAccountTranactions.items, this.walletAddress)
@@ -143,18 +142,18 @@ export default {
     }
   },
 
-  beforeMount() {
+  async beforeMount() {
     this.walletAddress = this.$route.params.wallet;
-    this.prepareAddressData();
-    this.prepareAccountBalanceData();
+    await this.prepareAccountBalanceData();
+    await this.prepareAddressData();
   },
 
   watch: {
     "$route.params.wallet": {
       handler: function () {
         this.walletAddress = this.$route.params.wallet;
-        this.prepareAddressData();
         this.prepareAccountBalanceData();
+        this.prepareAddressData();
       },
       deep: true,
       immediate: false,

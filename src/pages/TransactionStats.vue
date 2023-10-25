@@ -7,7 +7,7 @@
   </v-container>
 </template>
 <script>
-import SingleTransaction from "@/components/SingleTransaction.vue";
+import SingleTransaction from "@/components/SingleTransaction/SingleTransaction.vue";
 import { makeApiRequest } from "../assets/js/apiRequest";
 
 export default {

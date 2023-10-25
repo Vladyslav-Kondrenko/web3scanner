@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import CopyContent from "./copyContent/CopyContent.vue";
+import CopyContent from "../copyContent/CopyContent.vue";
 export default {
   components: {
     CopyContent,
@@ -105,5 +105,34 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+  .single-transaction{
+    padding: 8px 12px;
+    background: RGB(var(--v-theme-surface));
+    display: flex;
+    flex-direction: column;
+
+    &__item{
+      display: flex;
+      flex-direction: column;
+      padding: 8px 4px;
+
+      @media (min-width: 768px) {
+        flex-direction: row;
+      }
+
+      &:not(:first-of-type){
+        border-top: 1px solid RGB(var(--v-theme-background))
+      }
+    }
+
+    &__item-name{
+      width: 20%;
+      min-width: 140px;
+    }
+
+    &__item-value{
+      word-break: break-all;
+    }
+  }
 </style>

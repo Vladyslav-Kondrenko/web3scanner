@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import FavoriteWallet from "./favoritesWallet/FavoriteWallet.vue";
-import CopyContent from "./copyContent/CopyContent.vue";
+import FavoriteWallet from "../favoritesWallet/FavoriteWallet.vue";
+import CopyContent from "../copyContent/CopyContent.vue";
 import { sliceTransaction } from "@/helpers/sliceTransaction.js";
 export default {
   components: {

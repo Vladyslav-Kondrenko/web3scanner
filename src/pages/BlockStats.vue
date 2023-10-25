@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import PrimaryCard from "@/components/PrimaryCard.vue";
+import PrimaryCard from "@/components/PrimaryCard/PrimaryCard.vue";
 import TransactionsTable from "@/components/transactionsTable/TransactionsTable.vue";
 import { makeApiRequest } from "../assets/js/apiRequest";
 import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";

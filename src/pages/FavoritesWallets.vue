@@ -24,7 +24,7 @@
 
 <script>
 import { getCookie } from "@/helpers/getCookie";
-import FavoriteWalletCard from "@/components/favoriteWalletCard.vue";
+import FavoriteWalletCard from "@/components/favoriteWalletCard/favoriteWalletCard.vue";
 import { setCookie } from "@/helpers/setCookie";
 
 export default {

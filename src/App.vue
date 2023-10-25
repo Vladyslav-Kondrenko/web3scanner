@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import SearchForm from "@/components/SearchForm.vue";
+import SearchForm from "@/components/SearchForm/SearchForm.vue";
 import AppHeader from './layouts/Header/AppHeader.vue';
 
 export default {
