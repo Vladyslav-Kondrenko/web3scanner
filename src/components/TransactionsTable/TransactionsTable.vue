@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import TransactionsTableRow from "@/components/transactionsTable/TransactionsTableRow.vue";
+import TransactionsTableRow from "@/components/TransactionsTable/TransactionsTableRow.vue";
 
 export default {
   components: {

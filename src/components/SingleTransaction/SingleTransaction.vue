@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import CopyContent from "../copyContent/CopyContent.vue";
+import CopyContent from "../CopyContent/CopyContent.vue";
 export default {
   components: {
     CopyContent,

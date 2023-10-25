@@ -40,7 +40,7 @@ export default {
 
   computed: {
     buttonImageUrl() {
-      return require(`@/components/copyContent/img/copy-${this.copiedStatus}.svg`);
+      return require(`@/components/CopyContent/img/copy-${this.copiedStatus}.svg`);
     },
   },
 };

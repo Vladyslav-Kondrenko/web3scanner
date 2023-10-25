@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import TransactionsTableCell from "@/components/transactionsTable/TransactionsTableCell.vue";
+import TransactionsTableCell from "@/components/TransactionsTable/TransactionsTableCell.vue";
 
 export default {
   components: {

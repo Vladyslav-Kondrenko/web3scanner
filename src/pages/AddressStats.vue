@@ -44,16 +44,16 @@
 </template>
 
 <script>
-import TransactionsTable from "@/components/transactionsTable/TransactionsTable.vue";
-import CopyContent from "@/components/copyContent/CopyContent.vue";
+import TransactionsTable from "@/components/TransactionsTable/TransactionsTable.vue";
+import CopyContent from "@/components/CopyContent/CopyContent.vue";
 import { makeApiRequest } from "../assets/js/apiRequest";
 import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
-import FavoriteWallet from "@/components/favoritesWallet/FavoriteWallet.vue";
+import FavoriteWallet from "@/components/FavoritesWallet/FavoriteWallet.vue";
 import PrimaryCard from "@/components/PrimaryCard/PrimaryCard.vue";
 import AddressBalance from "@/components/AddressBalance/AddressBalance.vue";
 import { sliceTransaction } from "@/helpers/sliceTransaction";
 import { makeAmountReadable } from "@/helpers/makeAmountReadable";
-import donutChart from "@/components/donutChart/donutChart.vue";
+import donutChart from "@/components/DonutChart/donutChart.vue";
 
 export default {
   components: {

@@ -18,7 +18,7 @@
 </template>
   
   <script>
-import CopyContent from "@/components/copyContent/CopyContent.vue";
+import CopyContent from "@/components/CopyContent/CopyContent.vue";
 
 export default {
   components: {
