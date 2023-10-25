@@ -75,7 +75,7 @@ export default {
 
   methods: {
     handleImgErrorLoad(error) {
-      error.target.src = require(`@/components/AddressBalance/img/eth-default.svg`);
+      error.target.src = require(`@/components/WalletBalanceList/img/eth-default.svg`);
     },
 
     showMoreHandler() {

@@ -5,17 +5,15 @@
         <primary-card class="">
           <template v-slot:pretitle>Address </template>
           <template v-slot:title>
-            <copy-content
-              :content-for-copy="walletAddress"
-            >
-            <template v-slot:content>
-              <p>{{ slicedWallet }}</p>
-            </template>
+            <copy-content :content-for-copy="walletAddress">
+              <template v-slot:content>
+                <p>{{ slicedWallet }}</p>
+              </template>
             </copy-content>
-            <favorite-wallet :wallet="walletAddress"></favorite-wallet>
+            <add-to-favorites :wallet="walletAddress"></add-to-favorites>
           </template>
         </primary-card>
-        
+
         <primary-card>
           <template v-slot:pretitle> Balance </template>
           <template v-slot:title> $ {{ calculateTotalBalance }} </template>
@@ -24,15 +22,20 @@
         <primary-card>
           <template v-slot:pretitle> Tokens </template>
           <template v-slot:content>
-            <address-balance @activeItemKeyUpdated="showActiveItemOnChart"
+            <wallet-balance-list
+              @activeItemKeyUpdated="showActiveItemOnChart"
               :accountBalanceData="accountBalanceData"
-            ></address-balance>
+            ></wallet-balance-list>
           </template>
         </primary-card>
       </div>
 
       <div class="address-stats__donut">
-        <donut-chart class="address-stats__donut-content" :accountBalanceData="accountBalanceData" :activeItemIndex="activeToken"></donut-chart>
+        <donut-chart
+          class="address-stats__donut-content"
+          :accountBalanceData="accountBalanceData"
+          :activeItemIndex="activeToken"
+        ></donut-chart>
       </div>
     </div>
 
@@ -48,9 +51,9 @@ import TransactionsTable from "@/components/TransactionsTable/TransactionsTable.
 import CopyContent from "@/components/CopyContent/CopyContent.vue";
 import { makeApiRequest } from "../assets/js/apiRequest";
 import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
-import FavoriteWallet from "@/components/FavoritesWallet/FavoriteWallet.vue";
+import AddToFavorites from "@/components/AddToFavorites/AddToFavorites.vue";
 import PrimaryCard from "@/components/PrimaryCard/PrimaryCard.vue";
-import AddressBalance from "@/components/AddressBalance/AddressBalance.vue";
+import WalletBalanceList from "@/components/WalletBalanceList/WalletBalanceList.vue";
 import { sliceTransaction } from "@/helpers/sliceTransaction";
 import { makeAmountReadable } from "@/helpers/makeAmountReadable";
 import donutChart from "@/components/DonutChart/donutChart.vue";
@@ -59,9 +62,9 @@ export default {
   components: {
     TransactionsTable,
     CopyContent,
-    FavoriteWallet,
+    AddToFavorites,
     PrimaryCard,
-    AddressBalance,
+    WalletBalanceList,
     donutChart,
   },
 
@@ -77,17 +80,16 @@ export default {
 
   methods: {
     async prepareAddressData() {
-      // TODO: Придумать решение в случае если запрос сработал неверно. Возможно нужно отобразить блок "try again or later"
       // Clear array before fill it with new data
-      this.prettiedWalletAddress.splice(
-        0,
-        this.prettiedWalletAddress.length
-      );
+      this.prettiedWalletAddress.splice(0, this.prettiedWalletAddress.length);
 
       const rawAccountTranactions = await this.getRawAddressTransactons();
       if (rawAccountTranactions) {
         this.prettiedWalletAddress.push(
-          ...makeTransactionsPrettied(rawAccountTranactions.items, this.walletAddress)
+          ...makeTransactionsPrettied(
+            rawAccountTranactions.items,
+            this.walletAddress
+          )
         );
       }
     },
@@ -112,7 +114,9 @@ export default {
       const rawAccountData = await this.getRawAccountBalanceData();
 
       if (rawAccountData) {
-        this.accountBalanceData = this.makeBalancePrettier(rawAccountData.items);
+        this.accountBalanceData = this.makeBalancePrettier(
+          rawAccountData.items
+        );
       }
     },
 
@@ -137,9 +141,9 @@ export default {
       });
     },
 
-    showActiveItemOnChart(key){
+    showActiveItemOnChart(key) {
       this.activeToken = key;
-    }
+    },
   },
 
   async beforeMount() {

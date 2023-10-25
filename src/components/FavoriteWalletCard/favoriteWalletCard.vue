@@ -13,7 +13,7 @@
             <router-link :to="'/address/' + getWalletsAddress">{{ slicedWalletAddress }}</router-link>
           </template>
         </copy-content>
-        <favorite-wallet :wallet="getWalletsAddress" @deleteWalletFromFavorite="updateCardsAfterDelete"></favorite-wallet>
+        <add-to-favorites :wallet="getWalletsAddress" @deleteWalletFromFavorite="updateCardsAfterDelete"></add-to-favorites>
       </div>
 
       <textarea @input="walletCardSubmitHandler"
@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import FavoriteWallet from "@/components/FavoritesWallet/FavoriteWallet.vue";
+import AddToFavorites from "@/components/AddToFavorites/AddToFavorites.vue";
 import CopyContent from "@/components/CopyContent/CopyContent.vue";
 import { sliceTransaction } from "@/helpers/sliceTransaction.js";
 export default {
   components: {
-    FavoriteWallet,
+    AddToFavorites,
     CopyContent,
   },
 

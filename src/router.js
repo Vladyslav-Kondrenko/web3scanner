@@ -1,35 +1,35 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "@/pages/HomePage";
-import BlocksStats from "@/pages/BlockStats";
-import AddressStats from "@/pages/AddressStats";
-import TransactionStats from "@/pages/TransactionStats";
-import FavoritesWallets from "@/pages/FavoritesWallets";
+import BlockPage from "@/pages/BlockPage";
+import AddressPage from "@/pages/AddressPage";
+import SingleTransactionPage from "@/pages/SingleTransactionPage";
+import SavedWalletsPage from "@/pages/SavedWalletsPage";
 
 const routes = [
   {
     path: "/",
-    name: "Home page",
+    name: "Home",
     component: HomePage,
   },
   {
     path: "/block/:id",
-    name: "Blocks Stats",
-    component: BlocksStats,
+    name: "Block",
+    component: BlockPage,
   },
   {
     path: "/address/:wallet",
-    name: "Address Stats",
-    component: AddressStats,
+    name: "Address",
+    component: AddressPage,
   },
   {
     path: "/transaction/:hash",
-    name: "Transaction Stats",
-    component: TransactionStats,
+    name: "Single Transaction",
+    component: SingleTransactionPage,
   },
   {
     path: "/favorites-wallets/",
-    name: "Favorites Wallets",
-    component: FavoritesWallets,
+    name: "Saved Wallets",
+    component: SavedWalletsPage,
   },
 ];
 
