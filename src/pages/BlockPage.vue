@@ -5,8 +5,8 @@
       <template v-slot:title>{{ $route.params.id }}</template>
     </primary-card>
     <transactions-table
-      v-if="prettiedBlockTransactions.length > 0"
       :tableContent="prettiedBlockTransactions"
+      :enableSceleton="!isBlockDataLoaded"
     ></transactions-table>
   </v-container>
 </template>
@@ -27,6 +27,7 @@ export default {
     currentBlockID: "",
     prettiedBlockTransactions: [],
     queryPage: 0,
+    isBlockDataLoaded: false,
   }),
 
   methods: {
@@ -47,6 +48,7 @@ export default {
           )
         );
       }
+      this.isBlockDataLoaded = true;
     },
 
     async getRawBlockTransactons() {

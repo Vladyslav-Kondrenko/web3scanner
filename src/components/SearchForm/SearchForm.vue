@@ -10,7 +10,7 @@
         hide-details="auto"
         v-model="searchValue"
       ></v-text-field>
-      <v-btn type="submit" prepend-icon="$vuetify" size="x-large">
+      <v-btn type="submit" prepend-icon="mdi-search-web" size="x-large">
         Search
       </v-btn>
     </v-form>
@@ -21,7 +21,7 @@
 export default {
 
   data: () => ({
-    searchValue: "0x4c948bB3845BEfba915B9459c7A15a3A21349cF9",
+    searchValue: "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
     hasInputError: false,
     errorMessage: '',
   }),

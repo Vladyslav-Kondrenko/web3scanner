@@ -19,11 +19,18 @@
           <template v-slot:title> $ {{ calculateTotalBalance }} </template>
         </primary-card>
 
-        <primary-card>
+        <primary-card
+          v-if="
+            isAccountBalanceDataLoaded === false ||
+            (isAccountBalanceDataLoaded === true &&
+              accountBalanceData.length > 0)
+          "
+        >
           <template v-slot:pretitle> Tokens </template>
           <template v-slot:content>
             <wallet-balance-list
               @activeItemKeyUpdated="showActiveItemOnChart"
+              :showComponentSceleton="!isAccountBalanceDataLoaded"
               :accountBalanceData="accountBalanceData"
             ></wallet-balance-list>
           </template>
@@ -40,8 +47,8 @@
     </div>
 
     <transactions-table
-      v-if="prettiedWalletAddress.length > 0"
       :tableContent="prettiedWalletAddress"
+      :enableSceleton="!isAddressDataLoaded"
     ></transactions-table>
   </v-container>
 </template>
@@ -49,14 +56,16 @@
 <script>
 import TransactionsTable from "@/components/TransactionsTable/TransactionsTable.vue";
 import CopyContent from "@/components/CopyContent/CopyContent.vue";
-import { makeApiRequest } from "../assets/js/apiRequest";
-import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
-import AddToFavorites from "@/components/AddToFavorites/AddToFavorites.vue";
 import PrimaryCard from "@/components/PrimaryCard/PrimaryCard.vue";
 import WalletBalanceList from "@/components/WalletBalanceList/WalletBalanceList.vue";
+import AddToFavorites from "@/components/AddToFavorites/AddToFavorites.vue";
+import DonutChart from "@/components/DonutChart/donutChart.vue";
+import { makeApiRequest } from "../assets/js/apiRequest";
+import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
 import { sliceTransaction } from "@/helpers/sliceTransaction";
 import { makeAmountReadable } from "@/helpers/makeAmountReadable";
-import donutChart from "@/components/DonutChart/donutChart.vue";
+
+import { getTransactions } from "@/api/transactions";
 
 export default {
   components: {
@@ -65,7 +74,7 @@ export default {
     AddToFavorites,
     PrimaryCard,
     WalletBalanceList,
-    donutChart,
+    DonutChart,
   },
 
   data: () => ({
@@ -73,6 +82,8 @@ export default {
     prettiedWalletAddress: [],
     accountBalanceData: [],
     queryPage: 0,
+    isAccountBalanceDataLoaded: false,
+    isAddressDataLoaded: false,
 
     activeToken: null,
     DONUT_ITEMS_LIMIT: 10,
@@ -91,16 +102,14 @@ export default {
             this.walletAddress
           )
         );
+        this.isAddressDataLoaded = true;
       }
     },
 
     async getRawAddressTransactons() {
-      const url = `/address/${this.walletAddress}/transactions_v3/page/${this.queryPage}/`;
-      const queryParams = {
-        "block-signed-at-asc": true,
-      };
+   
       try {
-        return await makeApiRequest(this.$axios, url, queryParams);
+        return await getTransactions(this.$axios, this.walletAddress);
       } catch (error) {
         console.error(error);
       }
@@ -112,10 +121,16 @@ export default {
       this.accountBalanceData.splice(0);
 
       const rawAccountData = await this.getRawAccountBalanceData();
-
+      this.isAccountBalanceDataLoaded = true;
       if (rawAccountData) {
+        console.log(rawAccountData, "rawAccountData");
         this.accountBalanceData = this.makeBalancePrettier(
           rawAccountData.items
+        );
+        console.log(
+          this.accountBalanceData,
+          this.accountBalanceData.length,
+          "lenght"
         );
       }
     },

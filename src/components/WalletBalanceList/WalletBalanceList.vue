@@ -1,6 +1,5 @@
 <template>
-  <ul
-    v-if="accountBalanceData.length > 0"
+  <ul v-if="!showComponentSceleton"
     class="balance-tokens__list"
     ref="balanceList"
   >
@@ -31,6 +30,8 @@
       </div>
     </li>
   </ul>
+
+  <wallet-balance-list-sceleton v-if="showComponentSceleton"></wallet-balance-list-sceleton>
   <div
     v-if="accountBalanceData.length > DEFAULT_ITEM_VISIBLE_COUNT"
     class="balance-tokens__showmore"
@@ -48,12 +49,20 @@
 
 <script>
 import { scrollToTargetAdjusted } from "@/helpers/scrollToTargetAdjusted";
+import WalletBalanceListSceleton from "@/components/WalletBalanceList/WalletBalanceListSceleton.vue";
+
 export default {
+  components: {
+    WalletBalanceListSceleton
+  },
+
   data: () => ({
     DEFAULT_ITEM_VISIBLE_COUNT: 20,
     showFullBalance: false,
     activeElementKey: null,
   }),
+  
+  emits: ['activeItemKeyUpdated'],
 
   props: {
     accountBalanceData: {
@@ -63,15 +72,22 @@ export default {
         return [];
       },
     },
+    showComponentSceleton: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
 
   computed: {
     getAccountBalanceData() {
+      console.log(this.accountBalanceData, 'accountBalanceData')
       return this.showFullBalance
         ? this.accountBalanceData
         : this.accountBalanceData.slice(0, this.DEFAULT_ITEM_VISIBLE_COUNT);
     },
   },
+
 
   methods: {
     handleImgErrorLoad(error) {

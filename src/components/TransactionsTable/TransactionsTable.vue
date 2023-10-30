@@ -14,17 +14,24 @@
     </thead>
 
     <tbody>
-      <transactions-table-row v-for="(tableItem, index) in tableContent" :key="index" :tableItem="tableItem"></transactions-table-row>
+      <template v-if="enableSceleton">
+        <transactions-table-row-sceleton></transactions-table-row-sceleton>
+      </template>
+      <template v-if="!enableSceleton">
+        <transactions-table-row v-for="(tableItem, index) in tableContent" :key="index" :tableItem="tableItem"></transactions-table-row>
+      </template>
     </tbody>
   </table>
 </template>
 
 <script>
 import TransactionsTableRow from "@/components/TransactionsTable/TransactionsTableRow.vue";
+import TransactionsTableRowSceleton from "@/components/TransactionsTable/TransactionsTableRowSceleton.vue";
 
 export default {
   components: {
     TransactionsTableRow,
+    TransactionsTableRowSceleton,
   },
   props: {
     tableContent: {
@@ -34,10 +41,19 @@ export default {
         return [];
       },
     },
+    enableSceleton: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   data: () => ({}),
 
   methods: {},
+
+  mounted(){
+    console.log('mounted', this.enableSceleton);
+  }
 };
 </script>
 
@@ -88,7 +104,7 @@ table th {
   text-transform: uppercase;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
   table {
     border: 0;
   }
@@ -118,7 +134,6 @@ table th {
     border:none;
     display: block;
     font-size: 0.8em;
-    text-align: right;
   }
 
   table td::before {
