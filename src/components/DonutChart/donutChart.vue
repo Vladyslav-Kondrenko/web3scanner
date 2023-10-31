@@ -18,7 +18,7 @@ export default {
   }),
 
   props: {
-    accountBalanceData: {
+    walletBalanceData: {
       type: Object,
       required: true,
       default: () => {
@@ -40,15 +40,13 @@ export default {
         donutsLables.length > index
           ? donutsLables[index]
           : donutsLables[donutsLables.length - 1];
-      console.log(label);
-
       return label;
     },
   },
 
   computed: {
     getDonutsLabels() {
-      let donutLabels = this.accountBalanceData
+      let donutLabels = this.walletBalanceData
         .map((item) => item.contract_ticker_symbol)
         .slice(0, this.DONUT_ITEMS_LIMIT);
 
@@ -57,7 +55,7 @@ export default {
     },
 
     getDonutsSeries() {
-      let donutSeries = this.accountBalanceData.map((item) => {
+      let donutSeries = this.walletBalanceData.map((item) => {
         return Number(item.pretty_quote.replace(/[^\d.]/g, "")); // remove $ character
       });
 

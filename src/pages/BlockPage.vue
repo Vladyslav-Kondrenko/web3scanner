@@ -14,8 +14,9 @@
 <script>
 import PrimaryCard from "@/components/PrimaryCard/PrimaryCard.vue";
 import TransactionsTable from "@/components/TransactionsTable/TransactionsTable.vue";
-import { makeApiRequest } from "../assets/js/apiRequest";
 import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
+
+import { getBlock } from "@/api/block";
 
 export default {
   components: {
@@ -26,18 +27,13 @@ export default {
   data: () => ({
     currentBlockID: "",
     prettiedBlockTransactions: [],
-    queryPage: 0,
     isBlockDataLoaded: false,
   }),
 
   methods: {
     async prepareBlockData() {
-      // TODO: Придумать решение в случае если запрос сработал неверно. Возможно нужно отобразить блок "try again or later"
       // Clear array before fill it with new data
-      this.prettiedBlockTransactions.splice(
-        0,
-        this.prettiedBlockTransactions.length
-      );
+      this.prettiedBlockTransactions.splice(0);
 
       const rawBlockTranactions = await this.getRawBlockTransactons();
       if (rawBlockTranactions) {
@@ -52,11 +48,11 @@ export default {
     },
 
     async getRawBlockTransactons() {
-      const url = `/block/${this.$route.params.id}/transactions_v3/`;
+      const params = {
+        "block-signed-at-asc": true,
+      };
       try {
-        return await makeApiRequest(this.$axios, url, {
-          "block-signed-at-asc": true,
-        });
+        return await getBlock(this.$axios, this.$route.params.id, params);
       } catch (error) {
         console.error(error);
       }

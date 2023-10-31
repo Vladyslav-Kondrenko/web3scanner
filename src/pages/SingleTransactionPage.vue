@@ -8,7 +8,7 @@
 </template>
 <script>
 import SingleTransaction from "@/components/SingleTransaction/SingleTransaction.vue";
-import { makeApiRequest } from "../assets/js/apiRequest";
+import { getTransaction } from "@/api/transaction";
 
 export default {
   components: {
@@ -30,9 +30,8 @@ export default {
     },
 
     async getTransactionInfoByHash() {
-      const url = `/transaction_v2/${this.transactionHash}/`;
       try {
-        return await makeApiRequest(this.$axios, url);
+        return await getTransaction(this.$axios, this.transactionHash);
       } catch (error) {
         console.error(error);
       }

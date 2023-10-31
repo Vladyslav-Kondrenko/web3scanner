@@ -4,7 +4,7 @@
     ref="balanceList"
   >
     <li
-      v-for="(balanceItem, index) in getAccountBalanceData"
+      v-for="(balanceItem, index) in getWalletBalanceData"
       class="balance-tokens__item"
       @mouseover.stop="itemMouseEnterHandler(index)"
       @mouseleave.stop="itemMouseLeaveHandler"
@@ -33,7 +33,7 @@
 
   <wallet-balance-list-sceleton v-if="showComponentSceleton"></wallet-balance-list-sceleton>
   <div
-    v-if="accountBalanceData.length > DEFAULT_ITEM_VISIBLE_COUNT"
+    v-if="walletBalanceData.length > DEFAULT_ITEM_VISIBLE_COUNT"
     class="balance-tokens__showmore"
   >
     <v-btn
@@ -65,7 +65,7 @@ export default {
   emits: ['activeItemKeyUpdated'],
 
   props: {
-    accountBalanceData: {
+    walletBalanceData: {
       type: Array,
       required: true,
       default: () => {
@@ -80,11 +80,10 @@ export default {
   },
 
   computed: {
-    getAccountBalanceData() {
-      console.log(this.accountBalanceData, 'accountBalanceData')
+    getWalletBalanceData() {
       return this.showFullBalance
-        ? this.accountBalanceData
-        : this.accountBalanceData.slice(0, this.DEFAULT_ITEM_VISIBLE_COUNT);
+        ? this.walletBalanceData
+        : this.walletBalanceData.slice(0, this.DEFAULT_ITEM_VISIBLE_COUNT);
     },
   },
 

@@ -21,17 +21,17 @@
 
         <primary-card
           v-if="
-            isAccountBalanceDataLoaded === false ||
-            (isAccountBalanceDataLoaded === true &&
-              accountBalanceData.length > 0)
+            iswalletBalanceDataLoaded === false ||
+            (iswalletBalanceDataLoaded === true &&
+              walletBalanceData.length > 0)
           "
         >
           <template v-slot:pretitle> Tokens </template>
           <template v-slot:content>
             <wallet-balance-list
               @activeItemKeyUpdated="showActiveItemOnChart"
-              :showComponentSceleton="!isAccountBalanceDataLoaded"
-              :accountBalanceData="accountBalanceData"
+              :showComponentSceleton="!iswalletBalanceDataLoaded"
+              :walletBalanceData="walletBalanceData"
             ></wallet-balance-list>
           </template>
         </primary-card>
@@ -40,14 +40,14 @@
       <div class="address-stats__donut">
         <donut-chart
           class="address-stats__donut-content"
-          :accountBalanceData="accountBalanceData"
+          :walletBalanceData="walletBalanceData"
           :activeItemIndex="activeToken"
         ></donut-chart>
       </div>
     </div>
 
     <transactions-table
-      :tableContent="prettiedWalletAddress"
+      :tableContent="walletTransactionsData"
       :enableSceleton="!isAddressDataLoaded"
     ></transactions-table>
   </v-container>
@@ -60,12 +60,12 @@ import PrimaryCard from "@/components/PrimaryCard/PrimaryCard.vue";
 import WalletBalanceList from "@/components/WalletBalanceList/WalletBalanceList.vue";
 import AddToFavorites from "@/components/AddToFavorites/AddToFavorites.vue";
 import DonutChart from "@/components/DonutChart/donutChart.vue";
-import { makeApiRequest } from "../assets/js/apiRequest";
 import { makeTransactionsPrettied } from "@/assets/js/transactionsPrettier";
 import { sliceTransaction } from "@/helpers/sliceTransaction";
 import { makeAmountReadable } from "@/helpers/makeAmountReadable";
 
 import { getTransactions } from "@/api/transactions";
+import { getBalances } from "@/api/balances";
 
 export default {
   components: {
@@ -79,35 +79,32 @@ export default {
 
   data: () => ({
     walletAddress: "",
-    prettiedWalletAddress: [],
-    accountBalanceData: [],
+    walletTransactionsData: [],
+    walletBalanceData: [],
     queryPage: 0,
-    isAccountBalanceDataLoaded: false,
+    iswalletBalanceDataLoaded: false,
     isAddressDataLoaded: false,
-
     activeToken: null,
-    DONUT_ITEMS_LIMIT: 10,
   }),
 
   methods: {
     async prepareAddressData() {
       // Clear array before fill it with new data
-      this.prettiedWalletAddress.splice(0, this.prettiedWalletAddress.length);
+      this.walletTransactionsData.splice(0, this.walletTransactionsData.length);
 
       const rawAccountTranactions = await this.getRawAddressTransactons();
       if (rawAccountTranactions) {
-        this.prettiedWalletAddress.push(
+        this.walletTransactionsData.push(
           ...makeTransactionsPrettied(
             rawAccountTranactions.items,
             this.walletAddress
           )
         );
-        this.isAddressDataLoaded = true;
       }
+      this.isAddressDataLoaded = true;
     },
 
     async getRawAddressTransactons() {
-   
       try {
         return await getTransactions(this.$axios, this.walletAddress);
       } catch (error) {
@@ -117,38 +114,30 @@ export default {
 
     // --------------- Balance part
 
-    async prepareAccountBalanceData() {
-      this.accountBalanceData.splice(0);
+    async preparewalletBalanceData() {
+      this.walletBalanceData.splice(0);
 
-      const rawAccountData = await this.getRawAccountBalanceData();
-      this.isAccountBalanceDataLoaded = true;
+      const rawAccountData = await this.getRawwalletBalanceData();
+      this.iswalletBalanceDataLoaded = true;
       if (rawAccountData) {
-        console.log(rawAccountData, "rawAccountData");
-        this.accountBalanceData = this.makeBalancePrettier(
+        this.walletBalanceData = this.makeBalancePrettier(
           rawAccountData.items
-        );
-        console.log(
-          this.accountBalanceData,
-          this.accountBalanceData.length,
-          "lenght"
         );
       }
     },
 
-    async getRawAccountBalanceData() {
-      const url = `/address/${this.walletAddress}/balances_v2/`;
+    async getRawwalletBalanceData() {
       const queryParams = {
         "no-spam": true,
       };
       try {
-        return await makeApiRequest(this.$axios, url, queryParams);
+        return await getBalances(this.$axios, this.walletAddress, queryParams);
       } catch (error) {
         console.error(error);
       }
     },
 
     makeBalancePrettier(rawAccountData) {
-      console.log(rawAccountData);
       return rawAccountData.filter((item) => {
         return (
           item["pretty_quote"] !== "$0.00" && item["pretty_quote"] !== null
@@ -163,7 +152,7 @@ export default {
 
   async beforeMount() {
     this.walletAddress = this.$route.params.wallet;
-    await this.prepareAccountBalanceData();
+    await this.preparewalletBalanceData();
     await this.prepareAddressData();
   },
 
@@ -171,7 +160,7 @@ export default {
     "$route.params.wallet": {
       handler: function () {
         this.walletAddress = this.$route.params.wallet;
-        this.prepareAccountBalanceData();
+        this.preparewalletBalanceData();
         this.prepareAddressData();
       },
       deep: true,
@@ -182,7 +171,7 @@ export default {
   computed: {
     calculateTotalBalance() {
       return makeAmountReadable(
-        this.accountBalanceData
+        this.walletBalanceData
           .reduce(function (a, b) {
             return a + b.quote;
           }, 0)
