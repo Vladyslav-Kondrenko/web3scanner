@@ -23,7 +23,7 @@
         >
           <v-card-actions>
             <router-link
-              to="/address/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/"
+              to="/favorites-wallets/"
             >
               <v-btn size="large" variant="text" color="#ffffffde">Visit</v-btn>
             </router-link>

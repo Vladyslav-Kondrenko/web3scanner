@@ -28,7 +28,7 @@ const transactionPrettier = function (rawTransaction, currentAddress) {
   let pretty_value_quote = rawTransaction["pretty_value_quote"];
   const prettiedTransaction = {
     successful: {
-      text: successful,
+      text: successful ? 'Success' : 'Failed',
     },
     block_signed_at: {
       text: block_signed_at,
